@@ -1,0 +1,203 @@
+extends /base.pug
+block head
+  style(type="text/css"): include:stylus user.styl
+block body
+  include /modules/navtop.pug
+
+  .ldcv.autogap.scroll(ld="ldcv",data-name="add-user"): .base.rwd.w-640: .inner.p-4
+    h4.mb-3 Add account
+    p.text-sm.text-muted
+      | The account is created regardless of the site's signup policy, and the
+      | password below must be changed by the user on first login.
+    .form-group
+      label.mb-1.text-sm E-Mail
+      input.form-control(ld="add.username",type="email",aria-label="email")
+    .form-group
+      label.mb-1.text-sm Display name #[span.text-muted / defaults to the mail account]
+      input.form-control(ld="add.displayname",aria-label="displayname")
+    .form-group
+      label.mb-1.text-sm Password #[span.text-muted / random if left empty]
+      input.form-control(ld="add.password",aria-label="password")
+    .form-group: label.d-flex.align-items-center.g-2.mb-0
+      input(ld="add.verified",type="checkbox",checked)
+      span.ml-2 mark as verified
+    .d-flex.g-2.mt-4
+      .btn.btn-primary(ld="add-submit") Create
+      .btn.btn-outline-secondary(data-ldcv-set="") Cancel
+
+  .ldcv.autogap.scroll(ld="ldcv",data-name="confirm"): .base.rwd.w-640: .inner.p-4.text-center
+    h4.mb-1(ld="confirm-title") Are you sure?
+    p.text-muted(ld="confirm-desc")
+    .d-flex.g-3.mt-4
+      .btn.btn-danger.flex-grow-1(data-ldcv-set="yes") Yes, do it
+      .btn.btn-outline-secondary.flex-grow-1(data-ldcv-set="") Cancel
+
+  .ldcv.autogap.scroll(ld="ldcv",data-name="result"): .base.rwd.w-640: .inner.p-4
+    h4.mb-3 Result
+    .table-responsive
+      table.table.table-sm
+        thead: tr
+          th account
+          th result
+          th password
+        tbody: tr(ld-each="result")
+          td(ld="username")
+          td(ld="state")
+          td.text-monospace(ld="password")
+    .text-sm.text-muted A generated password is shown once, here, and never again.
+    .d-flex.g-2.mt-3
+      .btn.btn-outline-secondary(ld="copy-result") Copy
+      .btn.btn-outline-secondary(data-ldcv-set="") Close
+
+  .ldcv.autogap.scroll(ld="ldcv",data-name="credit"): .base.rwd.w-1024: .inner.p-4
+    .d-flex.align-items-baseline.mb-3
+      h4.mb-0.flex-grow-1 Credit
+      .text-muted(ld="credit-user")
+    .d-flex.g-4.mb-3
+      .card.flex-grow-1: .card-body.py-2
+        .text-sm.text-muted usable
+        .h4.mb-0(ld="credit-usable") 0
+      .card.flex-grow-1: .card-body.py-2
+        .text-sm.text-muted subscription
+        .h4.mb-0(ld="credit-subscription") 0
+      .card.flex-grow-1: .card-body.py-2
+        .text-sm.text-muted purchase
+        .h4.mb-0(ld="credit-purchase") 0
+    .card.mb-3: .card-body
+      h6 Adjust
+      p.text-sm.text-muted.mb-2
+        | A memo is required: the ledger is append-only, so the reason has to
+        | travel with the entry.
+      .form-row
+        .col-md-3.mb-2: select.form-control(ld="adjust.pool",aria-label="pool")
+          option(value="purchase") purchase
+          option(value="subscription") subscription
+        .col-md-3.mb-2: input.form-control(ld="adjust.delta",type="number",placeholder="+100 / -50",aria-label="delta")
+        .col-md-6.mb-2: input.form-control(ld="adjust.memo",placeholder="reason (required)",aria-label="memo")
+      .btn.btn-primary(ld="adjust-submit") Apply
+    .card.mb-3: .card-body
+      h6 Purchases
+      p.text-sm.text-muted.mb-2
+        | A refund reverses one purchase against its own grant, never FIFO across
+        | the others. What is left of a purchase is what can be clawed back - the
+        | rest was already spent, and whether to return that money anyway is a
+        | decision this page does not make.
+      input.form-control.form-control-sm.mb-2(ld="refund.memo",placeholder="refund reason (required)",aria-label="refund reason")
+      .d-flex.align-items-center.g-2.mb-2
+        .text-sm.text-muted.flex-grow-1
+          | Expiry is time-driven, so nothing happens on the day itself until a
+          | sweep goes looking. Cron runs this; the button runs it for this
+          | account only.
+        .btn.btn-sm.btn-outline-secondary.text-nowrap(ld="run-expire") Run expiry now
+      .text-sm.text-muted.py-2(ld="no-purchase") no purchases.
+      .d-flex.g-2.align-items-center.py-1.border-bottom.text-sm(ld-each="purchase")
+        .text-muted(style="width:4em") #[span(ld="pkey")]
+        div(style="width:9em")
+          span(ld="pamount")
+          span.text-muted  cr
+        .text-muted(style="width:7em") #[span(ld="pprice")]
+        div(style="width:9em"): span.badge(ld="pstate") -
+        div(style="width:11em"): span(ld="pexpire")
+        .flex-grow-1.text-muted(ld="ptime")
+        .btn.btn-sm.btn-outline-danger.py-0(ld="prefund") refund
+
+    .card.mb-3: .card-body
+      h6 Subscription pool
+      .d-flex.align-items-baseline.g-2.mb-2
+        .text-sm(ld="sub-info") no subscription
+        .flex-grow-1
+        .d-flex.g-1(ld="sub-live")
+          .btn.btn-sm.btn-outline-secondary.py-0(ld="sub-state",data-state="active") active
+          .btn.btn-sm.btn-outline-secondary.py-0(ld="sub-state",data-state="suspended") suspended
+          .btn.btn-sm.btn-outline-secondary.py-0(ld="sub-state",data-state="canceled") canceled
+      p.text-sm.text-muted.mb-2
+        | #[strong suspended] withdraws the entitlement without touching the balance:
+        | the credits stay on record and unspendable, and switching back to
+        | #[strong active] restores them with no re-grant. That is why the module
+        | gates instead of zeroing - zero-and-re-grant loses or duplicates credits
+        | when a suspension flaps.
+      p.text-sm.text-muted.mb-2
+        | Fill and Zero stand in for the billing cron. A refund gives back only what
+        | this period still holds; anything already consumed comes back as
+        | #[code consumed] and stays spent.
+      input.form-control.form-control-sm.mb-2(ld="subrefund.memo",placeholder="refund reason (required for refund)",aria-label="reason")
+      .d-flex.g-2.flex-wrap
+        .btn.btn-sm.btn-outline-secondary(ld="sub",data-action="fill",data-frequency="month") Fill (month)
+        .btn.btn-sm.btn-outline-secondary(ld="sub",data-action="fill",data-frequency="year") Fill (year)
+        .btn.btn-sm.btn-outline-secondary(ld="sub",data-action="zero") Zero
+        .btn.btn-sm.btn-outline-danger(ld="refund-sub") Refund this period
+        .flex-grow-1
+        .btn.btn-sm.btn-outline-secondary(ld="reconcile") Reconcile
+
+    .table-responsive
+      table.table.table-sm.mb-0
+        thead: tr
+          th time
+          th action
+          th pool
+          th.text-right delta
+          th.text-right after
+          th detail
+        tbody
+          tr(ld="credit-no-log"): td.text-center.text-muted.py-4(colspan="6") no records.
+          tr(ld-each="credit-log")
+            td.text-nowrap.text-sm(ld="time")
+            td(ld="action")
+            td.text-muted(ld="pool")
+            td.text-right.font-weight-bold(ld="delta")
+            td.text-right.text-muted(ld="after")
+            td.text-sm.text-muted(ld="detail")
+    .d-flex.justify-content-end.mt-3: .btn.btn-outline-secondary(data-ldcv-set="") Close
+
+  .w-1024.rwd.mx-auto.p-4
+    .d-flex.align-items-baseline.mb-3
+      h3.mb-0.flex-grow-1 Accounts
+      .btn.btn-primary(ld="add-user") Add account
+
+    .card.shadow-sm.mb-3: .card-body.pb-2
+      .d-flex.g-2.mb-2
+        input.form-control(ld="keyword",placeholder="email, display name, or user id")
+        .btn.btn-primary.text-nowrap(ld="search") Search
+        .btn.btn-outline-secondary.text-nowrap(ld="clear") Clear
+      .d-flex.align-items-center.g-2.flex-wrap
+        .text-sm.text-muted
+          span(ld="count") 0
+          |  account(s)
+          span(ld="not-empty")
+            | , showing
+            span.ml-1(ld="range") 0
+        .text-sm.text-primary.d-none(ld="has-checks")
+          span(ld="check-count") 0
+          |  selected
+        .flex-grow-1
+        .d-none(ld="has-checks"): .d-flex.g-2.flex-wrap
+          .btn.btn-sm.btn-outline-secondary(ld="action",data-name="verify") Verify
+          .btn.btn-sm.btn-outline-secondary(ld="action",data-name="unverify") Unverify
+          .btn.btn-sm.btn-outline-secondary(ld="action",data-name="logout") Log out
+          .btn.btn-sm.btn-outline-secondary(ld="action",data-name="password-reset") Reset password
+          .btn.btn-sm.btn-outline-danger(ld="action",data-name="delete") Delete
+
+    .card.shadow-sm: .userlist
+      .d-flex.user.user-head.py-2.px-2
+        .user-check(ld="check-all"): i.i-checkbox-off(ld="check-all-icon")
+        .user-key(ld="sort",data-field="key") id #[i(ld="sort-indicator")]
+        .user-username(ld="sort",data-field="username") e-mail #[i(ld="sort-indicator")]
+        .user-displayname(ld="sort",data-field="displayname") name #[i(ld="sort-indicator")]
+        .user-verified(ld="sort",data-field="verified") verified #[i(ld="sort-indicator")]
+        .user-createdtime(ld="sort",data-field="createdtime") created #[i(ld="sort-indicator")]
+        .user-action credit
+      .text-center.text-muted.py-5(ld="is-empty") no account found.
+      .d-flex.user.user-row.py-2.px-2.border-bottom.align-items-center(ld-each="user")
+        .user-check(ld="check"): i.i-checkbox-off(ld="check-icon")
+        .user-key(ld="key")
+        .user-username(ld="username")
+        .user-displayname(ld="displayname")
+        .user-verified: span.badge(ld="verified") no
+        .user-createdtime.text-sm.text-muted(ld="createdtime")
+        .user-action: .btn.btn-sm.btn-outline-primary.py-0(ld="credit") credit
+      .d-flex.g-2.p-2(ld="pager")
+        .btn.btn-sm.btn-outline-secondary(ld="page",data-dir="prev") Prev
+        .btn.btn-sm.btn-outline-secondary(ld="page",data-dir="next") Next
+
+block script
+  script(type="module"): include:lsc user.ls

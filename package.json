@@ -49,6 +49,7 @@
     "coverage": "npx nyc --reporter=text npm run test"
   },
   "dependencies": {
+    "@servebase/credit": "file:../credit",
     "@plotdb/block": "^5.2.0",
     "@plotdb/colors": "^0.0.3",
     "@plotdb/express-session": "^1.17.3",

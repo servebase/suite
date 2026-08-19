@@ -1,0 +1,148 @@
+extends /base.pug
+block body
+  include /modules/navtop.pug
+  .ldcv.autogap.scroll(ld="ldcv",data-name="pay"): .base.rwd.w-640: .inner.p-0
+    .bg-dark.text-white.px-4.py-2.text-sm
+      strong DEMO GATEWAY
+      |  - no payment is taken and nothing leaves this machine.
+    .p-4
+      h4.mb-1(ld="pay-plan") -
+      p.text-muted.mb-3
+        span(ld="pay-price") -
+        |  for
+        span.ml-1(ld="pay-credits") -
+        |  credits every period
+      .card.bg-light.mb-3: .card-body.py-2
+        .text-sm.text-muted.mb-1 card
+        .d-flex.g-2
+          input.form-control.form-control-sm(value="4242 4242 4242 4242",disabled,aria-label="card number, demo only")
+          input.form-control.form-control-sm(value="12/34",disabled,style="width:6em",aria-label="expiry, demo only")
+        .text-sm.text-muted.mt-1 Decorative: the fields are disabled and nothing is read from them.
+      p.text-sm.text-muted
+        | A real site never reaches its subscribe endpoint from a button like this
+        | one - it waits for the gateway to call back, because only the gateway
+        | knows whether the money moved.
+      .d-flex.g-2
+        .btn.btn-primary.flex-grow-1(data-ldcv-set="pay") Confirm payment
+        .btn.btn-outline-secondary(data-ldcv-set="") Cancel
+
+  .w-1024.rwd.mx-auto.p-4
+    h3.mb-1 Credit
+    p.text-muted Spend, top up, and review every movement on your account.
+
+    .row
+      .col-lg-5.mb-4
+        .card.shadow-sm.mb-3
+          .card-body
+            .d-flex.align-items-baseline.mb-1
+              h6.mb-0.flex-grow-1 Subscription
+              .text-sm.text-muted(ld="sub-state sub-state-chip")
+            div(ld="sub-none")
+              p.text-sm.text-muted.mb-2
+                | No plan. Subscription credits arrive each period and are spent before
+                | purchased ones, because they are the ones that go away.
+              .d-flex.g-2.flex-wrap
+                div(ld-each="plan")
+                  .btn.btn-outline-primary.btn-sm(ld="subscribe")
+                    span(ld="plan-name")
+                    span.text-muted.ml-1(ld="plan-price")
+            .d-none(ld="sub-live")
+              .h6.mb-0(ld="sub-plan") -
+              .text-sm.text-muted.mb-2
+                | period #[span(ld="sub-period") -]
+              p.text-sm.mb-2(ld="sub-note")
+              .d-flex.g-2.flex-wrap
+                .btn.btn-sm.btn-outline-secondary(ld="advance") Advance one period
+                .btn.btn-sm.btn-outline-danger(ld="cancel-sub") Cancel
+
+        .card.shadow-sm.mb-3
+          .card-body
+            .text-muted.text-sm Usable balance
+            .d-flex.align-items-baseline
+              .display-4.mb-0(ld="usable") 0
+              .ml-2.text-muted credits
+            hr
+            .d-flex.justify-content-between.mb-1
+              .text-muted Subscription
+              div
+                span(ld="subscription") 0
+                span.text-danger.text-sm.ml-2.d-none(ld="gated") not spendable
+            .d-flex.justify-content-between
+              .text-muted Purchase
+              div(ld="purchase") 0
+            hr
+            .text-sm.text-muted Subscription credits are spent first, then purchase credits oldest-first.
+
+        .card.shadow-sm.mb-3
+          .card-body
+            h6 Top up
+            .text-sm.text-muted.mb-2
+              | Demo only - there is no payment gateway here, so this grants purchase
+              | credits directly. Max #[span(ld="topup-max") 500] per request.
+            .input-group
+              input.form-control(ld="topup-amount",type="number",min="1",value="100",aria-label="amount")
+              .input-group-append: .btn.btn-primary(ld="topup") Top up
+            .d-flex.align-items-center.g-2.mt-2
+              .text-sm.text-muted.text-nowrap expires
+              select.form-control.form-control-sm(ld="topup-ttl",aria-label="expiry")
+                option(value="") site default
+                option(value="365") in a year
+                option(value="30") in 30 days
+                option(value="0") immediately (to watch the sweep)
+                option(value="never") never
+            .text-sm.text-muted.mt-1
+              | Purchased credits expire
+              span.ml-1(ld="topup-ttl-note") -
+              | . Subscription credits do not need this: their period ends on an
+              | event that already runs code, so nothing has to go looking.
+
+        .card.shadow-sm
+          .card-body
+            h6 Spend
+            .text-sm.text-muted.mb-2 Each job is charged in one transaction with the job record.
+            .d-flex.flex-wrap.g-2
+              div(ld-each="price")
+                .btn.btn-outline-primary(ld="buy")
+                  span(ld="name") name
+                  span.ml-2.text-muted
+                    span(ld="cost") 0
+                    |  cr
+            .mt-3.text-sm.text-muted(ld="recent-title") Recent jobs
+            .text-sm(ld="no-job") none yet.
+            .text-sm.d-flex.justify-content-between(ld-each="job")
+              div(ld="name")
+              .text-muted(ld="time")
+
+      .col-lg-7.mb-4
+        .card.shadow-sm
+          .card-body
+            .d-flex.align-items-center.mb-2
+              h6.mb-0.flex-grow-1 Ledger
+              .text-sm.text-muted
+                span(ld="log-range") 0
+                |  of
+                span.ml-1(ld="log-count") 0
+            .table-responsive
+              table.table.table-sm.mb-0
+                thead: tr
+                  th time
+                  th action
+                  th pool
+                  th.text-right delta
+                  th.text-right after
+                  th detail
+                tbody
+                  tr(ld="no-log"): td.text-center.text-muted.py-4(colspan="6") no records yet.
+                  tr(ld-each="log")
+                    td.text-nowrap.text-sm(ld="time")
+                    td(ld="action")
+                    td.text-muted(ld="pool")
+                    td.text-right.font-weight-bold(ld="delta")
+                    td.text-right.text-muted(ld="after")
+                    td.text-sm.text-muted(ld="detail")
+            .d-flex.g-2.mt-2(ld="pager")
+              .btn.btn-sm.btn-outline-secondary(ld="page",data-dir="prev") Prev
+              .btn.btn-sm.btn-outline-secondary(ld="page",data-dir="next") Next
+
+block script
+  script(type="module"): include:lsc index.ls

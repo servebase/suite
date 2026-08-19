@@ -1,0 +1,106 @@
+{
+  "name": "servebase-frontend-web",
+  "version": "0.0.1",
+  "description": "servebase demo site: staff account management + credit",
+  "author": "zbryikt",
+  "license": "MIT",
+  "scripts": {
+    "postinstall": "./node_modules/.bin/fedep"
+  },
+  "workspaces": [
+    "../../module/base/version",
+    "../../module/base/auth",
+    "../../module/base/captcha",
+    "../../module/base/consent",
+    "../../module/base/erratum",
+    "../../module/base/core",
+    "../../module/base/navtop",
+    "../../module/base/pugutil"
+  ],
+  "dependencies": {
+    "@loadingio/bootstrap.ext": "^0.0.9",
+    "@loadingio/debounce.js": "^1.0.1",
+    "@loadingio/ldc": "^0.0.4",
+    "@loadingio/ldquery": "^3.0.4",
+    "@loadingio/loading.css": "^3.1.0",
+    "@loadingio/transition.css": "^3.0.0",
+    "@plotdb/block": "^5.0.7",
+    "@plotdb/csscope": "^5.0.2",
+    "@plotdb/httputil": "^0.0.5",
+    "@plotdb/rescope": "^5.0.11",
+    "@plotdb/semver": "^0.0.3",
+    "bootstrap": "^4.6.1",
+    "bootstrap.native": "^3.0.10",
+    "curegex": "^0.0.4",
+    "fedep": "^1.1.7",
+    "i18next": "^22.4.7",
+    "i18next-browser-languagedetector": "^6.1.4",
+    "ldbutton": "^2.0.1",
+    "ldcover": "^3.5.3",
+    "ldcvmgr": "^0.0.15",
+    "lderror": "^2.4.2",
+    "ldform": "^0.1.2",
+    "ldiconfont": "^0.2.3",
+    "ldloader": "^3.0.1",
+    "ldnotify": "^0.0.6",
+    "ldview": "^1.2.1",
+    "proxise": "^1.0.1",
+    "zmgr": "^2.2.3"
+  },
+  "frontendDependencies": {
+    "root": "static/assets/lib",
+    "modules": [
+      "bootstrap",
+      "bootstrap.native",
+      "@loadingio/bootstrap.ext",
+      "@loadingio/ldquery",
+      "@loadingio/debounce.js",
+      "@loadingio/loading.css",
+      "@loadingio/transition.css",
+      "@loadingio/ldc",
+      "@plotdb/httputil",
+      "@plotdb/rescope",
+      "@plotdb/csscope",
+      "@plotdb/semver",
+      "@plotdb/block",
+      {
+        "name": "@servebase/auth",
+        "dir": "dist"
+      },
+      {
+        "name": "@servebase/captcha",
+        "dir": "dist"
+      },
+      {
+        "name": "@servebase/consent",
+        "dir": "dist"
+      },
+      {
+        "name": "@servebase/erratum",
+        "dir": "dist"
+      },
+      {
+        "name": "@servebase/core",
+        "dir": "dist"
+      },
+      {
+        "name": "@servebase/navtop",
+        "dir": "dist"
+      },
+      "curegex",
+      "proxise",
+      "ldiconfont",
+      "ldcvmgr",
+      "ldcover",
+      "lderror",
+      "ldloader",
+      "ldform",
+      "ldnotify",
+      "ldbutton",
+      "ldview",
+      "zmgr",
+      "i18next",
+      "i18next-browser-languagedetector"
+    ]
+  }
+}

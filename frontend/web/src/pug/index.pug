@@ -1,0 +1,44 @@
+extends /base.pug
+block body
+  include /modules/navtop.pug
+  .w-1024.rwd.mx-auto.p-4
+    .py-4
+      h1.mb-2 Servebase Demo
+      p.text-muted.mb-0
+        | A small site built on servebase: a staff console for accounts, and a
+        | credit balance you can spend, top up, and audit.
+
+    .card.shadow-sm.mb-4: .card-body.d-flex.align-items-center.flex-wrap.g-3
+      div(ld="signed-out")
+        .mb-2 You are not signed in.
+        .d-flex.g-2
+          .btn.btn-primary(ld="login") Login
+          .btn.btn-outline-secondary(ld="signup") Sign Up
+      div.d-none(ld="signed-in")
+        .text-muted.text-sm signed in as
+        .h5.mb-0(ld="who") -
+      .flex-grow-1
+      .text-sm.text-muted.d-none(ld="staff-note") You have staff rights on this site.
+
+    .row
+      .col-md-6.mb-4
+        .card.h-100.shadow-sm: .card-body
+          h5 Credit
+          p.text-muted.mb-3
+            | Two pools - subscription and purchase - one append-only ledger, and
+            | FIFO tracking per top-up. Spending a credit and recording what it
+            | bought happen in the same transaction.
+          a.btn.btn-outline-primary.d-none(ld="credit-link",href="/credit") Open credit page
+          .text-muted.text-sm(ld="credit-hint") Sign in to open the credit page.
+      .col-md-6.mb-4
+        .card.h-100.shadow-sm: .card-body
+          h5 Staff console
+          p.text-muted.mb-3
+            | Search accounts, create them in bulk-friendly form, verify, reset
+            | passwords, sign sessions out, delete - and adjust any account's
+            | credit with a mandatory memo.
+          a.btn.btn-outline-primary.d-none(ld="staff-link",href="/staff/user") Open staff console
+          .text-muted.text-sm(ld="staff-hint") Staff accounts only.
+
+block script
+  script(type="module"): include:lsc index.ls

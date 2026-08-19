@@ -1,0 +1,29 @@
+.userlist
+  .user > div
+    padding: 0 .25em
+    overflow: hidden
+    white-space: nowrap
+    text-overflow: ellipsis
+
+  .user-check { width: 2.5em; flex: 0 0 auto; cursor: pointer }
+  .user-key { width: 4em; flex: 0 0 auto }
+  .user-username { width: 12em; flex: 1 1 auto }
+  .user-displayname { width: 8em; flex: 1 1 auto }
+  .user-verified { width: 5em; flex: 0 0 auto }
+  .user-createdtime { width: 10em; flex: 0 0 auto }
+  .user-action { width: 5em; flex: 0 0 auto; text-align: right }
+
+  .user-head
+    user-select: none
+    font-weight: 700
+    background: #eee
+    & > div
+      cursor: pointer
+      border-radius: .25em
+    & > div:hover
+      background: #e0e0e0
+    i.i-dart-down, i.i-dart-up
+      font-size: .75em
+
+  .user-row:hover
+    background: #f4f8ff

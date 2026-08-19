@@ -1,0 +1,21 @@
+//- module
+//-
+  handlers used below come from @servebase/navtop: `authed` / `unauthed` toggle
+  on login state, `admin` toggles on users.staff. link labels are plain text
+  rather than `ld="t ..."` so the demo needs no navtop locale bundle.
++scope("@servebase/navtop").sticky.w-100.z-fixed(style="top:0")
+  .navtop(ld="root")
+    .py-2.px-4.d-flex.align-items-center.g-3
+      a.btn.btn-text.font-weight-bold(href="/") Servebase Demo
+      .d-none(ld="authed"): a.btn.btn-text(href="/credit") Credit
+      .d-none(ld="admin"): a.btn.btn-text(href="/staff/user") Staff
+      .flex-grow-1
+      .d-none(ld="unauthed")
+        .btn.btn-text(ld="login") Login
+        .btn.btn-text(ld="signup") Sign Up
+      .dropdown.d-none(ld="authed")
+        .btn.btn-text.dropdown-toggle(data-toggle="dropdown") #[span(ld="displayname")]
+        .dropdown-menu.dropdown-menu-right.shadow-sm
+          .dropdown-item.text-muted(ld="username")
+          .dropdown-divider
+          .dropdown-item.text-danger(ld="logout") Logout

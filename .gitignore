@@ -18,6 +18,9 @@ frontend/base/.view
 !frontend/auth
 frontend/auth/static
 frontend/auth/.view
+!frontend/web
+frontend/web/static
+frontend/web/.view
 package-lock.json
 .version
 module/version/index.pug
