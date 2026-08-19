@@ -36,8 +36,12 @@ is-pro = (owner, tx) ->
 # of sale, not a per-call decision.
 GRANT_TTL = 365
 
+# guards are required: the module has no standing to decide who counts as staff
+# here, and four of its five staff endpoints never touch `req.user`, so a
+# missing guard would serve every user's ledger rather than failing.
 credit = credit-route backend, {
   caps, is-pro, sub-ref-type: \subscription, grant-ttl: GRANT_TTL
+  guard: {generic: aux.signedin, staff: [aux.signedin, aux.is-admin]}
 }
 
 # priced features. the price list is served to the frontend so the two never
