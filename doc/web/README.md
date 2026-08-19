@@ -25,8 +25,14 @@ way `backend/base` does, so the routes only load for this site.
         npm install                       # root; pulls @servebase/credit
         cd frontend/web && npm install    # frontend deps; postinstall runs fedep
 
-    `package.json` references `"@servebase/credit": "file:../credit"`. Swap it
-    for a git or registry reference once that repo is published.
+    `package.json` takes the credit module straight from git
+    ( `github:servebase/credit#master` ). To work on it alongside this site:
+
+        cd ../credit && npm link
+        cd ../suite  && npm link @servebase/credit
+
+    A later `npm install` replaces the link with the git copy again, so re-link
+    when that happens.
 
  3. Create the database:
 
