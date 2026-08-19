@@ -6,11 +6,11 @@
 # refuses the caller's own account, so a mis-click on "select all" cannot lock
 # the operator out of the console they are standing in.
 
-require! <[lderror re2 curegex @servebase/backend/aux]>
+require! <[lderror re2js curegex @servebase/backend/aux]>
 (backend) <- (->module.exports = it)  _
 {db, session, route: {api}} = backend
 
-re-email = curegex.tw.get \email, re2
+re-email = curegex.tw.get \email, re2js.RE2JS
 is-email = -> !!re-email.exec(it)
 
 # whitelist: these land in the sql text, so they must never come from the client
